@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♥️ Affiliate Store 3D♥️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+        }
+
+        /* 3D Style Enhancements */
+        .card-3d {
+            border-radius: 1rem;
+            overflow: hidden;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            box-shadow: 10px 10px 20px #cbced1, -10px -10px 20px #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .card-3d::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+            z-index: -1;
+            border-radius: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .card-3d:hover {
+            transform: translateY(-8px) rotateX(5deg) rotateY(2deg);
+            box-shadow: 15px 15px 30px #b8bdc1, -5px -5px 15px #ffffff;
+            background: linear-gradient(145deg, #f8f9fa, #e2e2e2);
+        }
+        .card-3d:hover::before {
+             opacity: 1;
+        }
+
+        .btn-3d {
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1.5rem;
+            text-align: center;
+            display: inline-block;
+            transform: translateZ(10px);
+        }
+        .btn-3d:hover {
+            transform: translateY(-5px) translateZ(15px) scale(1.03);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+        .btn-3d:active {
+            transform: translateY(2px) translateZ(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-3d-primary { background: linear-gradient(45deg, #3b82f6, #1d4ed8); color: white; }
+        .btn-3d-secondary { background: linear-gradient(45deg, #10b981, #047857); color: white; }
+        .btn-3d-danger { background: linear-gradient(45deg, #ef4444, #b91c1c); color: white; }
+        .btn-3d-warning { background: linear-gradient(45deg, #f59e0b, #d97706); color: white; }
+        .btn-3d-gray { background: linear-gradient(45deg, #9ca3af, #6b7280); color: white; }
+
+        .input-3d {
+            border: 1px solid #d1d5db;
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 3px 3px 5px #cbced1, inset -3px -3px 5px #ffffff;
+            background-color: #f8f9fa;
+        }
+        .input-3d:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: inset 2px 2px 5px #cbced1, inset -2px -2px 5px #ffffff, 0 0 0 3px rgba(59, 130, 246, 0.3);
+            background-color: #ffffff;
+            transform: scale(1.01);
+        }
+
+        .scrolling-text {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(to right, #fef3c7, #fde68a);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .scrolling-text span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            transform: translateZ(20px);
+            animation: modalPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        @keyframes modalPopIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .image-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #1e40af; /* Blue 800 */
+            position: relative;
+            display: inline-block;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            border-radius: 2px;
+        }
+
+        .sidebar-menu {
+            background: linear-gradient(160deg, #1f2937, #111827);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        }
+        .sidebar-menu ul li a, .sidebar-menu ul li button {
+            transition: all 0.2s ease;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+        }
+        .sidebar-menu ul li a:hover, .sidebar-menu ul li button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        /* Header Enhancements */
+        header {
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Wallet Cards */
+        #wallets-section .bg-white {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+        #wallets-section .border-l-4 {
+            border-left-width: 6px;
+        }
+
+        /* Product Cards */
+        #product-list .bg-white, #product-list-dashboard .bg-white {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        }
+
+        /* Animations for elements appearing */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .animate-fade-in-up.delay-1 { animation-delay: 0.1s; }
+        .animate-fade-in-up.delay-2 { animation-delay: 0.2s; }
+        .animate-fade-in-up.delay-3 { animation-delay: 0.3s; }
+        .animate-fade-in-up.delay-4 { animation-delay: 0.4s; }
+
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Modals -->
+    <div id="message-modal" class="modal-overlay">
+        <div class="modal-content text-center max-w-md">
+            <div class="text-blue-600 mb-4">
+                <i class="fas fa-bell text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Notification</h3>
+            <p id="modal-message" class="text-gray-700 mb-6"></p>
+            <button onclick="hideModal()" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-bold hover:from-blue-600 hover:to-indigo-700 focus:outline-none shadow-lg transform transition duration-300 hover:scale-105 btn-3d">OK</button>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-content text-center max-w-md">
+            <div class="text-yellow-500 mb-4">
+                <i class="fas fa-exclamation-triangle text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Confirmation</h3>
+            <p id="confirm-modal-message" class="text-gray-700 mb-6"></p>
+            <div class="flex justify-center space-x-4">
+                <button id="confirm-yes-button" class="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl font-bold hover:from-red-600 hover:to-orange-600 focus:outline-none shadow-lg transform transition duration-300 hover:scale-105 btn-3d">Yes</button>
+                <button id="confirm-no-button" class="px-6 py-3 bg-gradient-to-r from-gray-400 to-gray-600 text-white rounded-xl font-bold hover:from-gray-500 hover:to-gray-700 focus:outline-none shadow-lg transform transition duration-300 hover:scale-105 btn-3d">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-profile-modal" class="modal-overlay">
+        <div id="admin-profile-content" class="modal-content max-w-2xl">
+        </div>
+    </div>
+
+    <div id="product-detail-modal" class="modal-overlay">
+        <div id="product-detail-content" class="modal-content max-w-3xl">
+        </div>
+    </div>
+
+    <div id="buy-product-modal" class="modal-overlay">
+        <div class="modal-content max-w-md">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-blue-700">Buy Product</h3>
+                <button onclick="hideBuyProductModal()" class="text-gray-500 hover:text-gray-700 bg-gray-200 rounded-full p-2 transition duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="buy-product-content">
+                <p id="buy-product-message" class="mb-4 text-gray-700"></p>
+                <input type="number" id="buy-product-amount" placeholder="Enter Amount" class="w-full px-4 py-3 mb-6 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <button onclick="submitProductRequest()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-chat-modal" class="modal-overlay">
+        <div class="modal-content max-w-2xl flex flex-col h-[80vh]">
+            <div class="flex items-center justify-between mb-4 pb-2 border-b">
+                <h3 class="text-2xl font-bold text-blue-700">Chat with <span id="admin-chat-user-name" class="text-indigo-600"></span></h3>
+                <button onclick="hideAdminChatModal()" class="text-gray-500 hover:text-gray-700 bg-gray-200 rounded-full p-2 transition duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="admin-chat-messages" class="flex-grow overflow-y-auto mb-4 p-4 bg-gray-50 rounded-xl space-y-4 shadow-inner"></div>
+            <div class="flex">
+                <input type="text" id="admin-chat-input" placeholder="Write a reply..." class="flex-grow px-4 py-3 rounded-l-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <button onclick="sendAdminReply()" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-r-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Page -->
+    <div id="auth-page" class="flex flex-col items-center justify-center min-h-screen p-4">
+        <div class="bg-gradient-to-br from-white to-gray-100 p-10 rounded-3xl shadow-2xl w-full max-w-md card-3d animate-fade-in-up">
+            <div class="text-center mb-8">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-5xl w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <i class="fas fa-store"></i>
+                </div>
+                <h2 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-700">Affiliate Store</h2>
+                <p class="text-gray-500 mt-2">Join and Earn</p>
+            </div>
+            <div id="login-form">
+                <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">Login</h3>
+                <input type="text" id="login-username" placeholder="Username" class="w-full px-5 py-4 mb-5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <input type="password" id="login-password" placeholder="Password" class="w-full px-5 py-4 mb-6 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Login</button>
+                <p class="mt-6 text-center">
+                    <a href="#" onclick="showSignupForm()" class="text-blue-600 hover:text-blue-800 font-medium hover:underline transition duration-300">Don't have an account? <span class="font-bold">Sign Up</span></a>
+                </p>
+            </div>
+            <div id="signup-form" class="hidden">
+                <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">Sign Up</h3>
+                <input type="text" id="signup-name" placeholder="Name" class="w-full px-5 py-4 mb-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <input type="password" id="signup-password" placeholder="Password" class="w-full px-5 py-4 mb-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <input type="text" id="signup-reffer-code" placeholder="Referral Code (Optional)" class="w-full px-5 py-4 mb-6 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                <button onclick="handleSignup()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-4 rounded-xl hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Sign Up</button>
+                <p class="mt-6 text-center">
+                    <a href="#" onclick="showLoginForm()" class="text-blue-600 hover:text-blue-800 font-medium hover:underline transition duration-300">Already have an account? <span class="font-bold">Login</span></a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="hidden p-4 md:p-6">
+        <header class="mb-8 py-6 px-8 flex flex-col md:flex-row items-center justify-between sticky top-4 z-10 card-3d animate-fade-in-up">
+            <div class="flex items-center space-x-4">
+                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-3xl w-14 h-14 rounded-xl flex items-center justify-center shadow-md">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h1 class="text-3xl font-extrabold text-white">Admin Dashboard</h1>
+            </div>
+            <button onclick="handleLogout()" class="mt-4 md:mt-0 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl font-bold hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Logout</button>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-1">
+                <h3 class="section-title">User Management</h3>
+                <div class="mb-6 pb-4 border-b">
+                    <h4 class="text-lg font-bold mb-3 text-gray-800">Register New User</h4>
+                    <input type="text" id="admin-signup-name" placeholder="Name" class="w-full px-4 py-3 mb-3 rounded-xl border input-3d">
+                    <input type="password" id="admin-signup-password" placeholder="Password" class="w-full px-4 py-3 mb-3 rounded-xl border input-3d">
+                    <input type="text" id="admin-signup-reffer-code" placeholder="Referral Code (Optional)" class="w-full px-4 py-3 mb-4 rounded-xl border input-3d">
+                    <button onclick="adminReferUser()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Register User</button>
+                </div>
+                <div id="user-list" class="space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-1">
+                <h3 class="section-title">Withdrawal Requests</h3>
+                <div id="withdrawal-requests" class="space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-1">
+                <h3 class="section-title">Order Requests</h3>
+                <div id="order-requests" class="space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-2">
+                <h3 class="section-title">Income Distribution</h3>
+                <div class="space-y-4 mb-4">
+                    <input type="number" id="incomeAmount" placeholder="Enter Amount to Distribute" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <button id="distributeBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Distribute Income</button>
+                </div>
+                <div id="uplineList" class="space-y-2">
+                </div>
+                <div id="incomeStatusMessage" class="mt-4 text-center font-medium text-gray-700"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-2">
+                <h3 class="section-title">Product Management</h3>
+                <form id="product-form" onsubmit="handleProductSubmit(event)" class="space-y-4 mb-6">
+                    <input type="hidden" id="product-id">
+                    <input type="text" id="product-title" placeholder="Title" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d" required>
+                    <textarea id="product-description" placeholder="Description" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d" required></textarea>
+                    <input type="number" id="product-mrp" placeholder="MRP" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="number" id="product-price" placeholder="Discount Price" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d" required>
+                    <input type="number" id="product-offer" placeholder="Income Offer (₹)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="number" id="product-rating" placeholder="Rating (1-5)" step="0.1" min="1" max="5" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="url" id="product-image1" placeholder="Image URL 1 (Main)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d" required>
+                    <input type="url" id="product-image2" placeholder="Image URL 2 (Optional)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="url" id="product-image3" placeholder="Image URL 3 (Optional)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="url" id="product-video" placeholder="YouTube Video URL (Optional)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Add/Update Product</button>
+                </form>
+                <div id="product-list-admin" class="space-y-3 max-h-64 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-2">
+                <h3 class="section-title">Video Management</h3>
+                <form id="video-form" class="space-y-4 mb-6">
+                    <input type="hidden" id="video-id">
+                    <input type="text" id="video-name" placeholder="Video Name" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="url" id="video-url" placeholder="YouTube Video URL" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Add/Update Video</button>
+                </form>
+                <div id="video-list-admin" class="space-y-3 max-h-64 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-3">
+                <h3 class="section-title">Video Course Management</h3>
+                <form id="video-course-form" class="space-y-4 mb-6">
+                    <input type="hidden" id="video-course-id">
+                    <input type="text" id="video-course-name" placeholder="Course Name" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <input type="url" id="video-course-url" placeholder="Video Course URL" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Add/Update Course</button>
+                </form>
+                <div id="video-courses-admin" class="space-y-3 max-h-64 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-6 rounded-2xl card-3d animate-fade-in-up delay-3 md:col-span-2 lg:col-span-3">
+                <h3 class="section-title">Public Message & Chat Reply</h3>
+                <div class="mb-6">
+                    <input type="text" id="public-message" placeholder="Write a public message" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <button onclick="postPublicMessage()" class="mt-3 w-full bg-gradient-to-r from-yellow-500 to-amber-500 text-white font-bold py-3 rounded-xl hover:from-yellow-600 hover:to-amber-600 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Post Message</button>
+                </div>
+                <div id="admin-chat-list" class="space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="hidden">
+        <header class="mb-8 py-6 px-6 sticky top-0 z-10 card-3d animate-fade-in-up">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center w-full md:w-auto justify-between md:justify-start mb-4 md:mb-0">
+                    <button id="menu-button" onclick="toggleMenu()" class="text-white text-2xl md:text-3xl mr-4 bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-xl shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                     <div class="flex items-center space-x-3">
+                         <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-2xl w-12 h-12 rounded-xl flex items-center justify-center shadow-md">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-white">Affiliate Store</h1>
+                    </div>
+                </div>
+                <span class="text-white font-medium text-base md:text-lg bg-black bg-opacity-20 px-4 py-2 rounded-full">Total Members: <span id="total-members-count" class="font-bold">0</span></span>
+            </div>
+            <div id="public-message-banner" class="mt-6 scrolling-text">
+                <span id="public-message-text" class="font-medium"></span>
+            </div>
+        </header>
+
+        <aside id="sidebar-menu" class="sidebar-menu fixed top-0 left-0 h-full w-64 transform -translate-x-full transition-transform duration-500 ease-in-out z-20 p-6">
+            <div class="flex items-center justify-between mb-10 mt-4">
+                <h2 class="text-2xl font-bold text-blue-400">Menu</h2>
+                <button onclick="toggleMenu()" class="text-white text-2xl p-2 rounded-full hover:bg-gray-700 transition duration-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="#" onclick="showDashboard()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-tachometer-alt text-lg"></i><span class="text-lg">Dashboard</span></a></li>
+                <li><a href="#" onclick="showProfile()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-user-circle text-lg"></i><span class="text-lg">Profile</span></a></li>
+                <li><a href="#" onclick="showProducts()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-shopping-bag text-lg"></i><span class="text-lg">Products</span></a></li>
+                <li><a href="#" onclick="showVideoCourse()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-book-open text-lg"></i><span class="text-lg">Video Course</span></a></li>
+                <li><a href="#" onclick="showVideos()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-video text-lg"></i><span class="text-lg">Product Videos</span></a></li>
+                <li><a href="#" onclick="showDownline()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-users text-lg"></i><span class="text-lg">My Team</span></a></li>
+                <li><a href="#" onclick="showSupport()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-headset text-lg"></i><span class="text-lg">Support</span></a></li>
+                <li><a href="#" onclick="shareApp()" class="flex items-center space-x-4 hover:text-blue-400 transition-colors"><i class="fas fa-share-alt text-lg"></i><span class="text-lg">Share App</span></a></li>
+                <li><button onclick="handleLogout()" class="w-full text-left flex items-center space-x-4 text-red-400 hover:text-red-500 transition-colors"><i class="fas fa-sign-out-alt text-lg"></i><span class="text-lg">Logout</span></button></li>
+            </ul>
+        </aside>
+        <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-60 z-10 hidden" onclick="toggleMenu()"></div>
+
+        <div class="p-4 md:p-8 animate-fade-in-up">
+            <div id="dashboard-view" class="space-y-8">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">My Dashboard</h2>
+                <div id="pending-message" class="bg-gradient-to-r from-yellow-100 to-amber-100 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-2xl shadow-md hidden card-3d">
+                    <div class="flex">
+                        <i class="fas fa-exclamation-circle text-2xl mr-3 mt-1"></i>
+                        <div>
+                            <p class="font-bold text-xl">Your account is pending!</p>
+                            <p class="mt-1">Please wait for admin approval.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="wallets-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="p-6 rounded-2xl border-l-4 border-green-500 card-3d animate-fade-in-up delay-1">
+                        <h3 class="font-semibold text-gray-600 text-lg">Total Income</h3>
+                        <p id="total-income" class="text-4xl font-extrabold text-gray-900 mt-2">₹0</p>
+                    </div>
+                    <div class="p-6 rounded-2xl border-l-4 border-blue-500 card-3d animate-fade-in-up delay-1">
+                        <h3 class="font-semibold text-gray-600 text-lg">Referral Income</h3>
+                        <p id="refer-income" class="text-4xl font-extrabold text-gray-900 mt-2">₹0</p>
+                    </div>
+                    <div class="p-6 rounded-2xl border-l-4 border-purple-500 card-3d animate-fade-in-up delay-1">
+                        <h3 class="font-semibold text-gray-600 text-lg">Self Income</h3>
+                        <p id="self-income" class="text-4xl font-extrabold text-gray-900 mt-2">₹0</p>
+                    </div>
+                    <div class="p-6 rounded-2xl border-l-4 border-orange-500 card-3d animate-fade-in-up delay-1">
+                        <h3 class="font-semibold text-gray-600 text-lg">Team Repurchase</h3>
+                        <p id="team-reparcez-income" class="text-4xl font-extrabold text-gray-900 mt-2">₹0</p>
+                    </div>
+                </div>
+                <div id="referral-section" class="mt-6 p-8 rounded-2xl flex flex-col items-center card-3d animate-fade-in-up delay-2">
+                    <h3 class="text-2xl font-extrabold mb-4 text-blue-700">My Referral Code</h3>
+                    <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <p id="my-referral-code" class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-700"></p>
+                        <button onclick="copyReferralCode()" class="px-5 py-3 bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 rounded-xl font-bold hover:from-gray-400 hover:to-gray-500 transition duration-300 shadow-md transform transition duration-300 hover:scale-105 btn-3d">
+                            <i class="fas fa-copy mr-2"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                <div id="withdraw-section" class="mt-8 p-8 rounded-2xl card-3d animate-fade-in-up delay-3">
+                    <h3 class="section-title">Withdrawal Request</h3>
+                    <p class="text-gray-600 mb-6">Minimum withdrawal amount is ₹50.</p>
+                    <input type="number" id="withdraw-amount" placeholder="Amount" class="w-full px-5 py-4 mb-6 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                    <button onclick="requestWithdrawal()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Submit Withdrawal Request</button>
+                </div>
+                <div id="products-on-dashboard" class="mt-8 animate-fade-in-up delay-4">
+                    <h3 class="section-title mb-6">Our Top Products</h3>
+                    <div id="product-list-dashboard" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-view" class="hidden">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">My Profile</h2>
+                <div class="p-8 rounded-2xl card-3d animate-fade-in-up">
+                    <form id="user-profile-form" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2 text-lg">Name</label>
+                            <input type="text" id="user-name-input" class="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2 text-lg">Mobile Number</label>
+                            <input type="text" id="user-mobile-input" class="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2 text-lg">Password</label>
+                            <input type="password" id="user-password-input" class="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2 text-lg">UPI ID</label>
+                            <input type="text" id="user-upi-input" class="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2 text-lg">Address</label>
+                            <input type="text" id="user-address-input" class="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-4 rounded-xl hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="products-view" class="hidden">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">Our Products</h2>
+                <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+            </div>
+
+            <div id="downline-view" class="hidden">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">My Team</h2>
+                <div id="downline-list" class="p-8 rounded-2xl card-3d animate-fade-in-up"></div>
+            </div>
+
+            <div id="video-course-view" class="hidden">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">Video Courses</h2>
+                <p class="text-gray-600 mb-6 text-lg">Watch video courses shared by the admin here.</p>
+                <div id="video-courses-list" class="space-y-6"></div>
+            </div>
+
+            <div id="videos-view" class="hidden">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">Product Videos</h2>
+                <p class="text-gray-600 mb-6 text-lg">Watch videos about our products here.</p>
+                <div id="video-links" class="space-y-6"></div>
+            </div>
+
+            <div id="support-view" class="hidden">
+                <h2 class="text-3xl font-extrabold text-blue-800 mb-6">Support Chat</h2>
+                <div class="rounded-2xl p-6 flex flex-col h-[70vh] card-3d animate-fade-in-up">
+                    <div id="chat-messages" class="flex-grow overflow-y-auto mb-6 p-4 bg-gray-50 rounded-xl space-y-4 shadow-inner"></div>
+                    <div class="flex">
+                        <input type="text" id="chat-input" placeholder="Write a message..." class="flex-grow px-5 py-4 rounded-l-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-3d">
+                        <button onclick="sendMessageToAdmin()" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-r-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase & Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2VPjOpN7UGjwC5MfpeQE_5jau4hnY2xU",
+            authDomain: "video-46de8.firebaseapp.com",
+            databaseURL: "https://video-46de8-default-rtdb.firebaseio.com",
+            projectId: "video-46de8",
+            storageBucket: "video-46de8.firebasestorage.app",
+            messagingSenderId: "363460455183",
+            appId: "1:363460455183:web:ad5b95410d7f1a3d836c7a"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const usersRef = database.ref('users');
+        const productsRef = database.ref('products');
+        const ordersRef = database.ref('orders');
+        const withdrawalsRef = database.ref('withdrawals');
+        const messagesRef = database.ref('messages');
+        const publicMessageRef = database.ref('publicMessage');
+        const videoCourseRef = database.ref('videoCourses');
+        const videoLinksRef = database.ref('videoLinks');
+        // Global State Variables
+        let currentUser = null;
+        let isAdmin = false;
+        let appShareUrl = window.location.href;
+        let activeAdminChatUserId = null;
+        let pendingBuyRequest = {};
+        // UI Element References
+        const authPage = document.getElementById('auth-page');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const userDashboard = document.getElementById('user-dashboard');
+        const adminPanel = document.getElementById('admin-panel');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const sidebarMenu = document.getElementById('sidebar-menu');
+        const messageModal = document.getElementById('message-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmModalMessage = document.getElementById('confirm-modal-message');
+        const confirmYesButton = document.getElementById('confirm-yes-button');
+        const confirmNoButton = document.getElementById('confirm-no-button');
+        const adminProfileModal = document.getElementById('admin-profile-modal');
+        const adminProfileContent = document.getElementById('admin-profile-content');
+        const productDetailModal = document.getElementById('product-detail-modal');
+        const productDetailContent = document.getElementById('product-detail-content');
+        const buyProductModal = document.getElementById('buy-product-modal');
+        const buyProductMessage = document.getElementById('buy-product-message');
+        const buyProductAmountInput = document.getElementById('buy-product-amount');
+        const adminChatModal = document.getElementById('admin-chat-modal');
+        const adminChatMessages = document.getElementById('admin-chat-messages');
+        const adminChatInput = document.getElementById('admin-chat-input');
+        const adminChatUserName = document.getElementById('admin-chat-user-name');
+        const dashboardView = document.getElementById('dashboard-view');
+        const profileView = document.getElementById('profile-view');
+        const productsView = document.getElementById('products-view');
+        const downlineView = document.getElementById('downline-view');
+        const videoCourseView = document.getElementById('video-course-view');
+        const videosView = document.getElementById('videos-view');
+        const supportView = document.getElementById('support-view');
+        const incomeAmountInput = document.getElementById('incomeAmount');
+        const distributeBtn = document.getElementById('distributeBtn');
+        const uplineList = document.getElementById('uplineList');
+        const incomeStatusMessage = document.getElementById('incomeStatusMessage');
+        const totalMembersCount = document.getElementById('total-members-count');
+        // Functions to show/hide UI sections
+        function showPage(pageId) {
+            authPage.style.display = 'none';
+            userDashboard.style.display = 'none';
+            adminPanel.style.display = 'none';
+            if (pageId === 'auth') authPage.style.display = 'flex';
+            if (pageId === 'user') userDashboard.style.display = 'block';
+            if (pageId === 'admin') adminPanel.style.display = 'block';
+        }
+        function showView(viewId) {
+            dashboardView.style.display = 'none';
+            profileView.style.display = 'none';
+            productsView.style.display = 'none';
+            downlineView.style.display = 'none';
+            videoCourseView.style.display = 'none';
+            videosView.style.display = 'none';
+            supportView.style.display = 'none';
+            document.getElementById(viewId).style.display = 'block';
+        }
+        function showModal(message) {
+            modalMessage.innerHTML = message;
+            messageModal.style.display = 'flex';
+        }
+        function hideModal() {
+            messageModal.style.display = 'none';
+        }
+        function showConfirmModal(message, onConfirm) {
+            confirmModalMessage.innerText = message;
+            confirmModal.style.display = 'flex';
+            confirmYesButton.onclick = () => {
+                onConfirm();
+                confirmModal.style.display = 'none';
+            };
+            confirmNoButton.onclick = () => {
+                confirmModal.style.display = 'none';
+            };
+        }
+        function showAdminProfileModal(content) {
+            adminProfileContent.innerHTML = content;
+            adminProfileModal.style.display = 'flex';
+        }
+        function hideAdminProfileModal() {
+            adminProfileModal.style.display = 'none';
+        }
+        function showProductDetailModal(content) {
+            productDetailContent.innerHTML = content;
+            productDetailModal.style.display = 'flex';
+        }
+        function hideProductDetailModal() {
+            productDetailModal.style.display = 'none';
+        }
+        function showBuyProductModal(product) {
+            buyProductMessage.innerText = `Please enter the amount you want to pay for "${product.title}"`;
+            buyProductAmountInput.value = product.price;
+            pendingBuyRequest = { productId: product.id, productTitle: product.title, price: product.price };
+            buyProductModal.style.display = 'flex';
+        }
+        function hideBuyProductModal() {
+            buyProductModal.style.display = 'none';
+            pendingBuyRequest = {};
+        }
+        function showAdminChatModal(userName) {
+            adminChatUserName.innerText = userName;
+            adminChatModal.style.display = 'flex';
+        }
+        function hideAdminChatModal() {
+            adminChatModal.style.display = 'none';
+            activeAdminChatUserId = null;
+        }
+        function showLoginForm() {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        }
+        function showSignupForm() {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        }
+        function toggleMenu() {
+            const isMenuHidden = sidebarMenu.classList.contains('-translate-x-full');
+            if (isMenuHidden) {
+                sidebarMenu.classList.remove('-translate-x-full');
+                menuOverlay.style.display = 'block';
+            } else {
+                sidebarMenu.classList.add('-translate-x-full');
+                menuOverlay.style.display = 'none';
+            }
+        }
+        // Function to update the total members count with a base of 300
+        function updateTotalMembersCount() {
+            const initialMembersCount = 300; // Starting with a fake count of 300
+            usersRef.on('value', (snapshot) => {
+                const realMembersCount = snapshot.numChildren();
+                const totalCount = initialMembersCount + realMembersCount;
+                totalMembersCount.innerText = totalCount;
+            });
+        }
+        // --- Authentication Logic ---
+        async function handleLogin() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            if (!username || !password) {
+                showModal('Please enter a username and password.');
+                return;
+            }
+            if (username === 'admin' && password === 'admin') {
+                currentUser = {
+                    name: 'Admin',
+                    username: 'admin',
+                    role: 'admin',
+                    uid: 'admin_uid'
+                };
+                isAdmin = true;
+                showPage('admin');
+                loadAdminData();
+                return;
+            }
+            const userSnapshot = await usersRef.orderByChild('username').equalTo(username).once('value');
+            if (userSnapshot.exists()) {
+                const user = Object.values(userSnapshot.val())[0];
+                if (user.password === password) {
+                    currentUser = {
+                        uid: Object.keys(userSnapshot.val())[0],
+                        ...user
+                    };
+                    isAdmin = false;
+                    showPage('user');
+                    updateDashboard();
+                } else {
+                    showModal('Invalid username or password.');
+                }
+            } else {
+                showModal('Invalid username or password.');
+            }
+        }
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+            const referCode = document.getElementById('signup-reffer-code').value.trim();
+            if (!name || !password) {
+                showModal('Please fill in all required fields.');
+                return;
+            }
+            if (name === 'admin') {
+                showModal('Username "admin" is not allowed.');
+                return;
+            }
+            const userSnapshot = await usersRef.orderByChild('username').equalTo(name).once('value');
+            if (userSnapshot.exists()) {
+                showModal('This username already exists. Please choose another.');
+                return;
+            }
+            let uplineUid = null;
+            if (referCode) {
+                const refererSnapshot = await usersRef.orderByChild('username').equalTo(referCode).once('value');
+                if (refererSnapshot.exists()) {
+                    const referer = Object.values(refererSnapshot.val())[0];
+                    if (referer.status === 'active') {
+                        uplineUid = Object.keys(refererSnapshot.val())[0];
+                    } else {
+                        showModal('Referral code is from a pending user. Please use an active user\'s code.');
+                        return;
+                    }
+                } else {
+                    showModal('Invalid referral code. Please check again.');
+                    return;
+                }
+            }
+            const newUser = {
+                name: name,
+                username: name,
+                password: password,
+                referralCode: name,
+                upline: uplineUid || null,
+                balance: 0,
+                referralIncome: 0,
+                selfIncome: 0,
+                teamRepurchaseIncome: 0,
+                status: 'pending',
+                role: 'user',
+                mobile: '',
+                upiId: '',
+                address: ''
+            };
+            try {
+                await usersRef.push(newUser);
+                showModal('Sign up successful! Your account is pending admin approval. You can login now.');
+                showLoginForm();
+            } catch (error) {
+                showModal('Sign up failed: ' + error.message);
+            }
+        }
+        async function adminReferUser() {
+            const name = document.getElementById('admin-signup-name').value.trim();
+            const password = document.getElementById('admin-signup-password').value.trim();
+            const referCode = document.getElementById('admin-signup-reffer-code').value.trim();
+            if (!name || !password) {
+                showModal('Please fill in name and password.');
+                return;
+            }
+            const userSnapshot = await usersRef.orderByChild('username').equalTo(name).once('value');
+            if (userSnapshot.exists()) {
+                showModal('This username already exists.');
+                return;
+            }
+            let uplineUid = null;
+            if (referCode) {
+                const refererSnapshot = await usersRef.orderByChild('username').equalTo(referCode).once('value');
+                if (refererSnapshot.exists()) {
+                    const referer = Object.values(refererSnapshot.val())[0];
+                    if (referer.status === 'active') {
+                        uplineUid = Object.keys(refererSnapshot.val())[0];
+                    } else {
+                        showModal('Referral code is from a pending user. Please use an active user\'s code.');
+                        return;
+                    }
+                } else {
+                    showModal('Invalid referral code. Please check again.');
+                    return;
+                }
+            }
+            const newUser = {
+                name: name,
+                username: name,
+                password: password,
+                referralCode: name,
+                upline: uplineUid || null,
+                balance: 0,
+                referralIncome: 0,
+                selfIncome: 0,
+                teamRepurchaseIncome: 0,
+                status: 'pending',
+                role: 'user',
+                mobile: '',
+                upiId: '',
+                address: ''
+            };
+            try {
+                await usersRef.push(newUser);
+                showModal('User registered by Admin successfully!');
+                document.getElementById('admin-signup-name').value = '';
+                document.getElementById('admin-signup-password').value = '';
+                document.getElementById('admin-signup-reffer-code').value = '';
+            } catch (error) {
+                showModal('User registration failed: ' + error.message);
+            }
+        }
+        function handleLogout() {
+            currentUser = null;
+            isAdmin = false;
+            showPage('auth');
+            showLoginForm();
+        }
+        // --- User Dashboard Logic ---
+        function updateDashboard() {
+            if (!currentUser) return;
+            showView('dashboard-view');
+            const userRef = usersRef.child(currentUser.uid);
+            userRef.on('value', (snapshot) => {
+                const userData = snapshot.val();
+                if (userData) {
+                    currentUser = { ...currentUser, ...userData };
+                    document.getElementById('total-income').innerText = `₹${currentUser.balance || 0}`;
+                    document.getElementById('refer-income').innerText = `₹${currentUser.referralIncome || 0}`;
+                    document.getElementById('self-income').innerText = `₹${currentUser.selfIncome || 0}`;
+                    document.getElementById('team-reparcez-income').innerText = `₹${currentUser.teamRepurchaseIncome || 0}`;
+                    document.getElementById('my-referral-code').innerText = currentUser.username;
+                    if (currentUser.status === 'pending') {
+                        document.getElementById('pending-message').style.display = 'block';
+                        document.getElementById('wallets-section').style.display = 'none';
+                        document.getElementById('withdraw-section').style.display = 'none';
+                        document.getElementById('referral-section').style.display = 'none';
+                    } else {
+                        document.getElementById('pending-message').style.display = 'none';
+                        document.getElementById('wallets-section').style.display = 'grid';
+                        document.getElementById('withdraw-section').style.display = 'block';
+                        document.getElementById('referral-section').style.display = 'flex';
+                    }
+                }
+            });
+            loadProductsDashboard();
+        }
+        function showProfile() {
+            showView('profile-view');
+            if (currentUser) {
+                document.getElementById('user-name-input').value = currentUser.name || '';
+                document.getElementById('user-mobile-input').value = currentUser.mobile || '';
+                document.getElementById('user-upi-input').value = currentUser.upiId || '';
+                document.getElementById('user-address-input').value = currentUser.address || '';
+                document.getElementById('user-password-input').value = '';
+            }
+        }
+        document.getElementById('user-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('user-name-input').value;
+            const mobile = document.getElementById('user-mobile-input').value;
+            const upiId = document.getElementById('user-upi-input').value;
+            const address = document.getElementById('user-address-input').value;
+            const password = document.getElementById('user-password-input').value;
+            const updates = { name, mobile, upiId, address };
+            if (password) {
+                updates.password = password;
+            }
+            try {
+                await usersRef.child(currentUser.uid).update(updates);
+                showModal('Profile updated successfully!');
+                currentUser = { ...currentUser, ...updates };
+            } catch (error) {
+                showModal('Failed to update profile: ' + error.message);
+            }
+        });
+        async function requestWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            if (isNaN(amount) || amount < 50) {
+                showModal('Minimum withdrawal amount is ₹50.');
+                return;
+            }
+            if (amount > currentUser.balance) {
+                showModal('Insufficient balance.');
+                return;
+            }
+            showConfirmModal(`Are you sure you want to withdraw ₹${amount}?`, async () => {
+                const newWithdrawal = {
+                    userId: currentUser.uid,
+                    userName: currentUser.name,
+                    amount: amount,
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
+                };
+                try {
+                    await withdrawalsRef.push(newWithdrawal);
+                    await usersRef.child(currentUser.uid).update({ balance: currentUser.balance - amount });
+                    showModal('Withdrawal request submitted successfully! It will be processed soon.');
+                    document.getElementById('withdraw-amount').value = '';
+                } catch (error) {
+                    showModal('Failed to submit withdrawal request: ' + error.message);
+                }
+            });
+        }
+        function showDownline() {
+            showView('downline-view');
+            loadDownline();
+        }
+        function loadDownline() {
+            const downlineList = document.getElementById('downline-list');
+            downlineList.innerHTML = '';
+            if (!currentUser || currentUser.status !== 'active') {
+                downlineList.innerHTML = '<p class="text-gray-600 text-lg">Your account must be active to view your team.</p>';
+                return;
+            }
+            usersRef.orderByChild('upline').equalTo(currentUser.uid).once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    let downlineCount = 0;
+                    snapshot.forEach((childSnapshot) => {
+                        const user = childSnapshot.val();
+                        downlineCount++;
+                        const downlineItem = document.createElement('div');
+                        downlineItem.className = 'flex justify-between items-center p-4 border-b last:border-b-0 hover:bg-gray-50 rounded-lg transition duration-300';
+                        downlineItem.innerHTML = `
+                            <span class="font-medium">${user.name}</span>
+                            <span class="text-sm px-3 py-1 rounded-full ${user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${user.status}</span>
+                        `;
+                        downlineList.appendChild(downlineItem);
+                    });
+                    const countElement = document.createElement('p');
+                    countElement.className = "font-bold text-xl mb-4 text-blue-700";
+                    countElement.innerHTML = `Total Team Members: ${downlineCount}`;
+                    downlineList.prepend(countElement);
+                } else {
+                    downlineList.innerHTML = '<p class="text-gray-600 text-lg">You have no team members yet.</p>';
+                }
+            });
+        }
+        function showVideoCourse() {
+            showView('video-course-view');
+            loadVideoCourses();
+        }
+        function loadVideoCourses() {
+            const videoCoursesContainer = document.getElementById('video-courses-list');
+            videoCoursesContainer.innerHTML = '';
+            if (!currentUser || currentUser.status !== 'active') {
+                videoCoursesContainer.innerHTML = '<p class="text-gray-600 text-lg bg-yellow-50 p-4 rounded-xl">Please activate your account to access video courses.</p>';
+                return;
+            }
+            videoCourseRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const course = childSnapshot.val();
+                        const courseItem = document.createElement('div');
+                        courseItem.className = 'p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gradient-to-r from-white to-gray-50 shadow-md card-3d';
+                        courseItem.innerHTML = `
+                            <div class="mb-4 sm:mb-0">
+                                <p class="font-bold text-xl">${course.name}</p>
+                                <p class="text-gray-600 text-sm mt-1">Click to open course</p>
+                            </div>
+                            <a href="${course.url}" target="_blank" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-bold hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-105 btn-3d">Open Course</a>
+                        `;
+                        videoCoursesContainer.appendChild(courseItem);
+                    });
+                } else {
+                    videoCoursesContainer.innerHTML = '<p class="text-gray-600 text-lg">No video courses available yet.</p>';
+                }
+            });
+        }
+        function showVideos() {
+            showView('videos-view');
+            loadVideoLinks();
+        }
+        function loadVideoLinks() {
+            const videoLinksContainer = document.getElementById('video-links');
+            videoLinksContainer.innerHTML = '';
+            videoLinksRef.once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const video = childSnapshot.val();
+                        const videoItem = document.createElement('div');
+                        videoItem.className = 'p-6 rounded-2xl bg-gradient-to-r from-white to-gray-50 shadow-md card-3d';
+                        videoItem.innerHTML = `
+                            <h4 class="font-bold text-xl mb-4">${video.name}</h4>
+                            <div class="relative overflow-hidden rounded-xl" style="padding-bottom: 56.25%;">
+                                <iframe class="absolute top-0 left-0 w-full h-full rounded-xl" src="${video.url.replace("watch?v=", "embed/")}" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        `;
+                        videoLinksContainer.appendChild(videoItem);
+                    });
+                } else {
+                    videoLinksContainer.innerHTML = '<p class="text-gray-600 text-lg">No videos available yet.</p>';
+                }
+            });
+        }
+        function showSupport() {
+            showView('support-view');
+            loadChatMessages();
+        }
+        function sendMessageToAdmin() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+            if (message === '' || !currentUser) return;
+            const messageData = {
+                senderId: currentUser.uid,
+                senderName: currentUser.name,
+                receiverId: 'admin_uid',
+                message: message,
+                timestamp: new Date().toISOString(),
+                isUserMessage: true
+            };
+            messagesRef.push(messageData);
+            chatInput.value = '';
+        }
+        function loadChatMessages() {
+            const chatMessagesContainer = document.getElementById('chat-messages');
+            chatMessagesContainer.innerHTML = '';
+            messagesRef.orderByChild('timestamp').on('value', (snapshot) => {
+                chatMessagesContainer.innerHTML = '';
+                snapshot.forEach((childSnapshot) => {
+                    const message = childSnapshot.val();
+                    if (message.senderId === currentUser.uid || message.receiverId === currentUser.uid) {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = `p-4 rounded-2xl max-w-xs md:max-w-md ${message.isUserMessage ? 'bg-gradient-to-r from-blue-100 to-indigo-100 self-end ml-auto' : 'bg-gradient-to-r from-gray-100 to-gray-200 self-start mr-auto'}`;
+                        messageDiv.innerText = message.message;
+                        chatMessagesContainer.appendChild(messageDiv);
+                    }
+                });
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            });
+        }
+        function copyReferralCode() {
+            const code = document.getElementById('my-referral-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                showModal('Referral code copied to clipboard!');
+            }).catch(err => {
+                showModal('Could not copy code. Please copy manually.');
+            });
+        }
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Affiliate Store App',
+                    text: `Join Affiliate Store and start earning! Use my referral code: ${currentUser.referralCode}`,
+                    url: appShareUrl,
+                }).then(() => console.log('Successful share'))
+                  .catch((error) => console.log('Error sharing:', error));
+            } else {
+                const shareMessage = `Join Affiliate Store and start earning! Use my referral code: ${currentUser.referralCode}
+${appShareUrl}`;
+                navigator.clipboard.writeText(shareMessage).then(() => {
+                    showModal('Referral link copied to clipboard!');
+                }).catch(err => {
+                    showModal('Could not copy link to clipboard. Please copy manually.');
+                });
+            }
+        }
+        // --- Product Listing Functions ---
+        async function handleProductSubmit(event) {
+            event.preventDefault();
+            const productId = document.getElementById('product-id').value;
+            const title = document.getElementById('product-title').value;
+            const description = document.getElementById('product-description').value;
+            const mrp = parseFloat(document.getElementById('product-mrp').value);
+            const price = parseFloat(document.getElementById('product-price').value);
+            const offer = parseFloat(document.getElementById('product-offer').value);
+            const rating = parseFloat(document.getElementById('product-rating').value);
+            const image1 = document.getElementById('product-image1').value;
+            const image2 = document.getElementById('product-image2').value;
+            const image3 = document.getElementById('product-image3').value;
+            const video = document.getElementById('product-video').value;
+            if (!title || !price || !image1) {
+                showModal('Title, Price, and at least one Image URL are required.');
+                return;
+            }
+            const productData = {
+                title,
+                description,
+                mrp: mrp > 0 ? mrp : null,
+                price,
+                offer: offer > 0 ? offer : null,
+                rating: rating > 0 ? rating : null,
+                images: [image1, image2, image3].filter(url => url),
+                video,
+            };
+            try {
+                if (productId) {
+                    await productsRef.child(productId).update(productData);
+                    showModal('Product updated successfully!');
+                } else {
+                    await productsRef.push({ ...productData, createdAt: new Date().toISOString() });
+                    showModal('Product listed successfully!');
+                }
+                document.getElementById('product-form').reset();
+                document.getElementById('product-id').value = '';
+                loadProductsAdmin();
+                loadProductsUser();
+                loadProductsDashboard();
+            } catch (error) {
+                showModal('Failed to save product: ' + error.message);
+            }
+        }
+        function loadProductsAdmin() {
+            const productListAdmin = document.getElementById('product-list-admin');
+            productListAdmin.innerHTML = '';
+            productsRef.on('value', (snapshot) => {
+                productListAdmin.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const product = childSnapshot.val();
+                        const productId = childSnapshot.key;
+                        const productCard = document.createElement('div');
+                        productCard.className = 'p-4 rounded-xl mb-4 bg-gradient-to-r from-gray-50 to-white shadow-sm card-3d';
+                        productCard.innerHTML = `
+                            <h4 class="font-bold text-lg">${product.title}</h4>
+                            <p class="text-gray-700"><strong>Price:</strong> ₹${product.price}</p>
+                            <p class="text-gray-700"><strong>MRP:</strong> ₹${product.mrp || 'N/A'}</p>
+                            <div class="flex space-x-2 mt-3">
+                                <button onclick="editProduct('${productId}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Edit</button>
+                                <button onclick="deleteProduct('${productId}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete</button>
+                            </div>
+                        `;
+                        productListAdmin.appendChild(productCard);
+                    });
+                } else {
+                    productListAdmin.innerHTML = '<p class="text-gray-600">No products listed yet.</p>';
+                }
+            });
+        }
+        async function editProduct(productId) {
+            const productSnapshot = await productsRef.child(productId).once('value');
+            const product = productSnapshot.val();
+            if (product) {
+                document.getElementById('product-id').value = productId;
+                document.getElementById('product-title').value = product.title;
+                document.getElementById('product-description').value = product.description;
+                document.getElementById('product-mrp').value = product.mrp;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-offer').value = product.offer;
+                document.getElementById('product-rating').value = product.rating;
+                document.getElementById('product-image1').value = product.images[0] || '';
+                document.getElementById('product-image2').value = product.images[1] || '';
+                document.getElementById('product-image3').value = product.images[2] || '';
+                document.getElementById('product-video').value = product.video || '';
+            }
+        }
+        function deleteProduct(productId) {
+            showConfirmModal('Are you sure you want to delete this product?', async () => {
+                try {
+                    await productsRef.child(productId).remove();
+                    showModal('Product deleted successfully!');
+                    loadProductsAdmin();
+                    loadProductsUser();
+                } catch (error) {
+                    showModal('Failed to delete product: ' + error.message);
+                }
+            });
+        }
+        function showProducts() {
+            showView('products-view');
+            loadProductsUser();
+        }
+        function loadProductsUser() {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            productsRef.on('value', (snapshot) => {
+                productList.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const product = childSnapshot.val();
+                        const productId = childSnapshot.key;
+                        const productCard = document.createElement('div');
+                        productCard.className = 'p-6 rounded-2xl flex flex-col items-center text-center shadow-md card-3d';
+                        const priceHtml = product.mrp > 0 ?
+                            `<p class="text-gray-500 line-through text-lg">MRP: ₹${product.mrp}</p>
+                             <p class="text-3xl font-extrabold text-blue-600">₹${product.price}</p>` :
+                            `<p class="text-3xl font-extrabold text-blue-600">₹${product.price}</p>`;
+                        productCard.innerHTML = `
+                            <img src="${product.images[0]}" alt="${product.title}" class="w-full h-56 object-cover rounded-xl mb-6 shadow">
+                            <h3 class="text-2xl font-extrabold mb-3">${product.title}</h3>
+                            ${priceHtml}
+                            <p class="text-yellow-500 mt-3 text-xl">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</p>
+                            <button onclick="showProductDetail('${productId}')" class="mt-6 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">View Details</button>
+                        `;
+                        productList.appendChild(productCard);
+                    });
+                } else {
+                    productList.innerHTML = '<p class="text-gray-600 text-lg col-span-full text-center">No products listed yet.</p>';
+                }
+            });
+        }
+        function loadProductsDashboard() {
+            const productListDashboard = document.getElementById('product-list-dashboard');
+            productListDashboard.innerHTML = '';
+            productsRef.on('value', (snapshot) => {
+                productListDashboard.innerHTML = '';
+                if (snapshot.exists()) {
+                    let count = 0;
+                    snapshot.forEach((childSnapshot) => {
+                         if (count >= 6) return; // Limit to 6 products on dashboard
+                        const product = childSnapshot.val();
+                        const productId = childSnapshot.key;
+                        const productCard = document.createElement('div');
+                        productCard.className = 'p-6 rounded-2xl flex flex-col items-center text-center shadow-md card-3d';
+                        const priceHtml = product.mrp > 0 ?
+                            `<p class="text-gray-500 line-through text-base">MRP: ₹${product.mrp}</p>
+                             <p class="text-2xl font-extrabold text-blue-600">₹${product.price}</p>` :
+                            `<p class="text-2xl font-extrabold text-blue-600">₹${product.price}</p>`;
+                        productCard.innerHTML = `
+                            <img src="${product.images[0]}" alt="${product.title}" class="w-full h-48 object-cover rounded-xl mb-4 shadow">
+                            <h3 class="text-xl font-extrabold mb-2">${product.title}</h3>
+                            ${priceHtml}
+                            <p class="text-yellow-500 mt-2 text-lg">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</p>
+                            <button onclick="showProductDetail('${productId}')" class="mt-4 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-2.5 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-[1.02] btn-3d">View Details</button>
+                        `;
+                        productListDashboard.appendChild(productCard);
+                        count++;
+                    });
+                } else {
+                    productListDashboard.innerHTML = '<p class="text-gray-600 text-lg col-span-full text-center">No products listed yet.</p>';
+                }
+            });
+        }
+        async function showProductDetail(productId) {
+            const productSnapshot = await productsRef.child(productId).once('value');
+            const product = productSnapshot.val();
+            if (!product) {
+                showModal('Product not found.');
+                return;
+            }
+            let imageGalleryHtml = product.images.map(imgUrl => `<img src="${imgUrl}" alt="${product.title}" loading="lazy" />`).join('');
+            let youtubeVideoHtml = product.video ? `
+                <div class="mt-8">
+                    <h4 class="font-extrabold text-2xl mb-4 text-blue-700">Product Video</h4>
+                    <div class="relative overflow-hidden rounded-2xl" style="padding-bottom: 56.25%;">
+                        <iframe class="absolute top-0 left-0 w-full h-full rounded-2xl" src="${product.video.replace("watch?v=", "embed/")}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            ` : '';
+            const content = `
+                <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                    <h3 class="text-3xl font-extrabold">${product.title}</h3>
+                    <button onclick="hideProductDetailModal()" class="text-gray-500 hover:text-gray-700 bg-gray-200 rounded-full p-2 transition duration-300">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="image-gallery">
+                    ${imageGalleryHtml}
+                </div>
+                <div class="mt-6">
+                    <p class="text-3xl font-extrabold text-blue-600">₹${product.price} <span class="text-gray-500 text-xl line-through">MRP: ₹${product.mrp || 'N/A'}</span></p>
+                    <p class="text-gray-700 mt-4 text-lg">${product.description}</p>
+                    <p class="text-yellow-500 mt-4 text-2xl">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-4">Income Offer: ₹${product.offer || 0}</p>
+                </div>
+                ${youtubeVideoHtml}
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-8 pt-6 border-t">
+                    <button onclick="handleBuyProductClick('${productId}')" class="w-full sm:w-auto mb-4 sm:mb-0 sm:mr-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-xl font-bold hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow-lg transform transition duration-300 hover:scale-[1.02] btn-3d">Buy Now</button>
+                </div>
+            `;
+            showProductDetailModal(content);
+        }
+        async function handleBuyProductClick(productId) {
+            hideProductDetailModal();
+            if (!currentUser) {
+                showModal('Please log in to buy products.');
+                return;
+            }
+            if (currentUser.status === 'pending') {
+                showModal('Your account must be active to buy products.');
+                return;
+            }
+            const productSnapshot = await productsRef.child(productId).once('value');
+            const product = productSnapshot.val();
+            if (product) {
+                showBuyProductModal({ id: productId, title: product.title, price: product.price });
+            } else {
+                showModal('Product not found.');
+            }
+        }
+        async function submitProductRequest() {
+            if (!currentUser) {
+                hideBuyProductModal();
+                showModal('Please log in to submit a request.');
+                return;
+            }
+            if (currentUser.status === 'pending') {
+                hideBuyProductModal();
+                showModal('Your account must be active to buy products.');
+                return;
+            }
+            const amount = parseFloat(buyProductAmountInput.value);
+            if (isNaN(amount) || amount <= 0) {
+                showModal('Please enter a valid amount.');
+                return;
+            }
+            const productId = pendingBuyRequest.productId;
+            const productTitle = pendingBuyRequest.productTitle;
+            const newOrder = {
+                userId: currentUser.uid,
+                userName: currentUser.name,
+                userStatus: currentUser.status,
+                productId: productId,
+                productTitle: productTitle,
+                amountPaid: amount,
+                incomeOffer: 0,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            try {
+                const newOrderRef = ordersRef.push(newOrder);
+                await newOrderRef;
+                console.log("Order request successfully submitted:", newOrderRef.key);
+                hideBuyProductModal();
+                showModal('Order request submitted successfully! We will contact you soon.');
+            } catch (error) {
+                console.error("Failed to submit order request:", error);
+                showModal('Failed to submit order request: ' + error.message);
+            }
+        }
+        // --- Admin Panel Logic ---
+        function loadAdminData() {
+            loadUsersAdmin();
+            loadWithdrawalRequests();
+            loadOrderRequests();
+            loadPublicMessage();
+            loadVideoCoursesAdmin();
+            loadVideoLinksAdmin();
+            loadProductsAdmin();
+            loadAdminChatList();
+        }
+        function loadUsersAdmin() {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            usersRef.on('value', (snapshot) => {
+                userList.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const user = childSnapshot.val();
+                        const userId = childSnapshot.key;
+                        if (userId === currentUser.uid) return;
+                        const userDiv = document.createElement('div');
+                        userDiv.className = `p-5 rounded-xl mb-3 ${user.status === 'pending' ? 'bg-gradient-to-r from-yellow-50 to-amber-50 border-l-4 border-yellow-500' : 'bg-gradient-to-r from-gray-50 to-white'} shadow-sm card-3d`;
+                        userDiv.innerHTML = `
+                            <p class="font-semibold"><strong>Name:</strong> ${user.name}</p>
+                            <p class="text-gray-700"><strong>Username:</strong> ${user.username}</p>
+                            <p class="text-gray-700"><strong>Status:</strong> <span class="font-bold px-2 py-1 rounded ${user.status === 'pending' ? 'bg-yellow-200 text-yellow-800' : user.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">${user.status}</span></p>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <button onclick="showAdminProfile('${userId}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">View Profile</button>
+                                ${user.status === 'pending' ? `<button onclick="approveUser('${userId}')" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Approve</button>` : ''}
+                                ${user.status === 'active' ? `<button onclick="blockUser('${userId}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Block</button>` : ''}
+                                <button onclick="deleteUser('${userId}')" class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-lg font-medium hover:from-gray-600 hover:to-gray-800 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete</button>
+                                <button onclick="startAdminChat('${userId}', '${user.name}')" class="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg font-medium hover:from-purple-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Chat</button>
+                            </div>
+                        `;
+                        userList.appendChild(userDiv);
+                    });
+                }
+            });
+        }
+        async function showAdminProfile(userId) {
+            const userSnapshot = await usersRef.child(userId).once('value');
+            const user = userSnapshot.val();
+            if (!user) return;
+            const content = `
+                <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                    <h3 class="text-3xl font-extrabold">User Profile: ${user.name}</h3>
+                    <button onclick="hideAdminProfileModal()" class="text-gray-500 hover:text-gray-700 bg-gray-200 rounded-full p-2 transition duration-300">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                    <div>
+                        <p class="mb-3"><strong>Username:</strong> ${user.username}</p>
+                        <p class="mb-3"><strong>Mobile:</strong> ${user.mobile || 'N/A'}</p>
+                        <p class="mb-3"><strong>UPI ID:</strong> ${user.upiId || 'N/A'}</p>
+                    </div>
+                    <div>
+                        <p class="mb-3"><strong>Address:</strong> ${user.address || 'N/A'}</p>
+                        <p class="mb-3"><strong>Referral Code:</strong> ${user.referralCode}</p>
+                        <p class="mb-3"><strong>Upline:</strong> ${user.upline || 'N/A'}</p>
+                    </div>
+                </div>
+                <p class="mt-4 text-lg"><strong>Status:</strong> <span class="font-bold px-3 py-1 rounded ${user.status === 'pending' ? 'bg-yellow-200 text-yellow-800' : user.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">${user.status}</span></p>
+                <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-gray-50 to-white shadow-inner card-3d">
+                    <h4 class="text-2xl font-extrabold mb-4 text-blue-700">Income Details</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
+                        <p><strong>Total Income:</strong> <span class="font-bold text-green-600">₹${user.balance || 0}</span></p>
+                        <p><strong>Referral Income:</strong> <span class="font-bold text-blue-600">₹${user.referralIncome || 0}</span></p>
+                        <p><strong>Self Income:</strong> <span class="font-bold text-purple-600">₹${user.selfIncome || 0}</span></p>
+                        <p><strong>Team Repurchase Income:</strong> <span class="font-bold text-orange-600">₹${user.teamRepurchaseIncome || 0}</span></p>
+                    </div>
+                </div>
+            `;
+            showAdminProfileModal(content);
+        }
+        async function approveUser(userId) {
+            showConfirmModal('Are you sure you want to approve this user?', async () => {
+                try {
+                    await usersRef.child(userId).update({ status: 'active' });
+                    showModal('User approved successfully!');
+                } catch (error) {
+                    showModal('Failed to approve user: ' + error.message);
+                }
+            });
+        }
+        async function blockUser(userId) {
+            showConfirmModal('Are you sure you want to block this user?', async () => {
+                try {
+                    await usersRef.child(userId).update({ status: 'blocked' });
+                    showModal('User blocked successfully!');
+                } catch (error) {
+                    showModal('Failed to block user: ' + error.message);
+                }
+            });
+        }
+        async function deleteUser(userId) {
+            showConfirmModal('Are you sure you want to permanently delete this user and all their data?', async () => {
+                try {
+                    await usersRef.child(userId).remove();
+                    showModal('User deleted successfully!');
+                } catch (error) {
+                    showModal('Failed to delete user: ' + error.message);
+                }
+            });
+        }
+        function loadWithdrawalRequests() {
+            const requestsList = document.getElementById('withdrawal-requests');
+            requestsList.innerHTML = '';
+            withdrawalsRef.on('value', (snapshot) => {
+                requestsList.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const request = childSnapshot.val();
+                        const requestId = childSnapshot.key;
+                        const requestDiv = document.createElement('div');
+                        requestDiv.className = 'p-5 rounded-xl mb-3 bg-gradient-to-r from-gray-50 to-white shadow-sm card-3d';
+                        requestDiv.innerHTML = `
+                            <p class="font-semibold"><strong>User:</strong> ${request.userName}</p>
+                            <p class="text-gray-700"><strong>Amount:</strong> ₹${request.amount}</p>
+                            <p class="text-gray-700"><strong>Status:</strong> <span class="font-bold px-2 py-1 rounded ${request.status === 'pending' ? 'bg-yellow-200 text-yellow-800' : request.status === 'approved' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">${request.status}</span></p>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                ${request.status === 'pending' ? `<button onclick="approveWithdrawal('${requestId}')" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Approve</button>` : ''}
+                                ${request.status === 'pending' ? `<button onclick="rejectWithdrawal('${requestId}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Reject</button>` : ''}
+                                <button onclick="deleteWithdrawal('${requestId}')" class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-lg font-medium hover:from-gray-600 hover:to-gray-800 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete</button>
+                            </div>
+                        `;
+                        requestsList.appendChild(requestDiv);
+                    });
+                } else {
+                    requestsList.innerHTML = '<p class="text-gray-600">No withdrawal requests.</p>';
+                }
+            });
+        }
+        async function deleteWithdrawal(requestId) {
+            showConfirmModal('Delete this withdrawal record?', async () => {
+                try {
+                    await withdrawalsRef.child(requestId).remove();
+                    showModal('Withdrawal record deleted!');
+                } catch (error) {
+                    showModal('Failed to delete record: ' + error.message);
+                }
+            });
+        }
+        async function approveWithdrawal(requestId) {
+            showConfirmModal('Approve this withdrawal?', async () => {
+                try {
+                    await withdrawalsRef.child(requestId).update({ status: 'approved' });
+                    showModal('Withdrawal approved.');
+                } catch (error) {
+                    showModal('Failed to approve withdrawal: ' + error.message);
+                }
+            });
+        }
+        async function rejectWithdrawal(requestId) {
+            showConfirmModal('Reject this withdrawal?', async () => {
+                try {
+                    await withdrawalsRef.child(requestId).update({ status: 'rejected' });
+                    showModal('Withdrawal rejected.');
+                } catch (error) {
+                    showModal('Failed to reject withdrawal: ' + error.message);
+                }
+            });
+        }
+        function loadOrderRequests() {
+            const requestsList = document.getElementById('order-requests');
+            requestsList.innerHTML = '';
+            ordersRef.on('value', (snapshot) => {
+                requestsList.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const request = childSnapshot.val();
+                        const orderId = childSnapshot.key;
+                        if (request.status !== 'pending') return;
+                        const requestDiv = document.createElement('div');
+                        requestDiv.className = 'p-5 rounded-xl mb-3 bg-gradient-to-r from-gray-50 to-white shadow-sm card-3d';
+                        requestDiv.innerHTML = `
+                            <p class="font-semibold"><strong>User:</strong> ${request.userName}</p>
+                            <p class="text-gray-700"><strong>User Status:</strong> <span class="px-2 py-1 rounded ${request.userStatus === 'pending' ? 'bg-yellow-200 text-yellow-800' : request.userStatus === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}">${request.userStatus}</span></p>
+                            <p class="text-gray-700"><strong>Product:</strong> ${request.productTitle}</p>
+                            <p class="text-gray-700"><strong>Amount Paid:</strong> ₹${request.amountPaid}</p>
+                            <p class="text-gray-700"><strong>Status:</strong> <span class="font-bold px-2 py-1 rounded bg-yellow-200 text-yellow-800">${request.status}</span></p>
+                            <div class="mt-4">
+                                <label class="block mb-2 font-medium">Repurchase Income (₹)</label>
+                                <input type="number" id="income-${orderId}" placeholder="Enter amount" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 input-3d">
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <button onclick="approveOrderWithIncome('${orderId}')" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Approve & Distribute</button>
+                                <button onclick="cancelOrder('${orderId}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Cancel</button>
+                                <button onclick="deleteOrder('${orderId}')" class="px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-lg font-medium hover:from-gray-600 hover:to-gray-800 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete</button>
+                            </div>
+                        `;
+                        requestsList.appendChild(requestDiv);
+                    });
+                } else {
+                    requestsList.innerHTML = '<p class="text-gray-600">No new orders.</p>';
+                }
+            });
+        }
+        async function deleteOrder(orderId) {
+            showConfirmModal('Delete this order record?', async () => {
+                try {
+                    await ordersRef.child(orderId).remove();
+                    showModal('Order record deleted!');
+                } catch (error) {
+                    showModal('Failed to delete record: ' + error.message);
+                }
+            });
+        }
+        async function approveOrderWithIncome(orderId) {
+            const incomeInput = document.getElementById(`income-${orderId}`);
+            const incomeOffer = parseFloat(incomeInput.value);
+            if (isNaN(incomeOffer) || incomeOffer <= 0) {
+                showModal('Please enter a valid repurchase income amount.');
+                return;
+            }
+            const orderSnapshot = await ordersRef.child(orderId).once('value');
+            const order = orderSnapshot.val();
+            if (!order) {
+                showModal('Order not found.');
+                return;
+            }
+            showConfirmModal(`Approve this order and distribute ₹${incomeOffer} income?`, async () => {
+                try {
+                    const userSnapshot = await usersRef.child(order.userId).once('value');
+                    const user = userSnapshot.val();
+                    if (!user) {
+                        showModal('User not found.');
+                        return;
+                    }
+                    const selfPercent = 30;
+                    const firstUplinePercent = 30;
+                    const secondUplinePercent = 10;
+                    const otherUplinePercent = 10;
+                    const selfIncome = (incomeOffer * selfPercent) / 100;
+                    const firstUplineIncome = (incomeOffer * firstUplinePercent) / 100;
+                    const secondUplineIncome = (incomeOffer * secondUplinePercent) / 100;
+                    await usersRef.child(order.userId).transaction((userData) => {
+                        if (userData) {
+                            userData.balance = (userData.balance || 0) + selfIncome;
+                            userData.selfIncome = (userData.selfIncome || 0) + selfIncome;
+                        }
+                        return userData;
+                    });
+                    let currentUplineId = user.upline;
+                    let level = 1;
+                    while (currentUplineId && level <= 5) {
+                        const uplineSnapshot = await usersRef.child(currentUplineId).once('value');
+                        const uplineUser = uplineSnapshot.val();
+                        if (uplineUser && uplineUser.status === 'active') {
+                            let incomeToDistribute = 0;
+                            if (level === 1) {
+                                incomeToDistribute = firstUplineIncome;
+                            } else if (level === 2) {
+                                incomeToDistribute = secondUplineIncome;
+                            } else if (level >= 3) {
+                                incomeToDistribute = (incomeOffer * otherUplinePercent) / 100;
+                            }
+                            if (incomeToDistribute > 0) {
+                                await usersRef.child(currentUplineId).transaction((uplineData) => {
+                                    if (uplineData) {
+                                        uplineData.balance = (uplineData.balance || 0) + incomeToDistribute;
+                                        uplineData.referralIncome = (uplineData.referralIncome || 0) + incomeToDistribute;
+                                        uplineData.teamRepurchaseIncome = (uplineData.teamRepurchaseIncome || 0) + incomeToDistribute;
+                                    }
+                                    return uplineData;
+                                });
+                            }
+                        }
+                        if (uplineUser && uplineUser.upline) {
+                            currentUplineId = uplineUser.upline;
+                        } else {
+                            currentUplineId = null;
+                        }
+                        level++;
+                    }
+                    await ordersRef.child(orderId).update({ status: 'approved', incomeOffer: incomeOffer });
+                    showModal('Order approved and income distributed successfully!');
+                } catch (error) {
+                    showModal('Failed to approve order and distribute income: ' + error.message);
+                }
+            });
+        }
+        async function cancelOrder(orderId) {
+            showConfirmModal('Cancel this order?', async () => {
+                try {
+                    await ordersRef.child(orderId).update({ status: 'cancelled' });
+                    showModal('Order cancelled.');
+                } catch (error) {
+                    showModal('Failed to cancel order: ' + error.message);
+                }
+            });
+        }
+        async function postPublicMessage() {
+            const message = document.getElementById('public-message').value.trim();
+            if (message) {
+                try {
+                    await publicMessageRef.set(message);
+                    showModal('Public message posted successfully!');
+                    document.getElementById('public-message').value = '';
+                } catch (error) {
+                    showModal('Failed to post message: ' + error.message);
+                }
+            }
+        }
+        function loadPublicMessage() {
+            const publicMessageText = document.getElementById('public-message-text');
+            publicMessageRef.on('value', (snapshot) => {
+                const message = snapshot.val();
+                if (message) {
+                    publicMessageText.innerText = message;
+                } else {
+                    publicMessageText.innerText = 'Welcome to Affiliate Store! Start earning today.';
+                }
+            });
+        }
+        function loadVideoCoursesAdmin() {
+            const videoCoursesContainer = document.getElementById('video-courses-admin');
+            videoCoursesContainer.innerHTML = '';
+            videoCourseRef.on('value', (snapshot) => {
+                videoCoursesContainer.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const course = childSnapshot.val();
+                        const courseId = childSnapshot.key;
+                        const courseItem = document.createElement('div');
+                        courseItem.className = 'p-4 rounded-xl mb-3 bg-gradient-to-r from-gray-50 to-white shadow-sm flex justify-between items-center card-3d';
+                        courseItem.innerHTML = `
+                            <span class="font-medium">${course.name}</span>
+                            <div class="flex space-x-2">
+                                <button onclick="editVideoCourse('${courseId}')" class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Edit</button>
+                                <button onclick="deleteVideoCourse('${courseId}')" class="px-3 py-1.5 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete</button>
+                            </div>
+                        `;
+                        videoCoursesContainer.appendChild(courseItem);
+                    });
+                }
+            });
+        }
+        document.getElementById('video-course-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const courseId = document.getElementById('video-course-id').value;
+            const name = document.getElementById('video-course-name').value;
+            const url = document.getElementById('video-course-url').value;
+            if (!name || !url) {
+                showModal('Please fill in both name and URL.');
+                return;
+            }
+            try {
+                if (courseId) {
+                    await videoCourseRef.child(courseId).update({ name, url });
+                    showModal('Video course updated successfully!');
+                } else {
+                    await videoCourseRef.push({ name, url });
+                    showModal('Video course added successfully!');
+                }
+                document.getElementById('video-course-form').reset();
+                document.getElementById('video-course-id').value = '';
+                loadVideoCoursesAdmin();
+                loadVideoCourses();
+            } catch (error) {
+                showModal('Failed to manage video course: ' + error.message);
+            }
+        });
+        async function editVideoCourse(courseId) {
+            const courseSnapshot = await videoCourseRef.child(courseId).once('value');
+            const course = courseSnapshot.val();
+            if (course) {
+                document.getElementById('video-course-id').value = courseId;
+                document.getElementById('video-course-name').value = course.name;
+                document.getElementById('video-course-url').value = course.url;
+            }
+        }
+        function deleteVideoCourse(courseId) {
+            showConfirmModal('Delete this video course?', async () => {
+                try {
+                    await videoCourseRef.child(courseId).remove();
+                    showModal('Video course deleted!');
+                    loadVideoCoursesAdmin();
+                    loadVideoCourses();
+                } catch (error) {
+                    showModal('Failed to delete video course: ' + error.message);
+                }
+            });
+        }
+        function loadVideoLinksAdmin() {
+            const videoLinksContainer = document.getElementById('video-list-admin');
+            videoLinksContainer.innerHTML = '';
+            videoLinksRef.on('value', (snapshot) => {
+                videoLinksContainer.innerHTML = '';
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const video = childSnapshot.val();
+                        const videoId = childSnapshot.key;
+                        const videoItem = document.createElement('div');
+                        videoItem.className = 'p-4 rounded-xl mb-3 bg-gradient-to-r from-gray-50 to-white shadow-sm flex justify-between items-center card-3d';
+                        videoItem.innerHTML = `
+                            <span class="font-medium">${video.name}</span>
+                            <div class="flex space-x-2">
+                                <button onclick="editVideoLink('${videoId}')" class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Edit</button>
+                                <button onclick="deleteVideoLink('${videoId}')" class="px-3 py-1.5 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete</button>
+                            </div>
+                        `;
+                        videoLinksContainer.appendChild(videoItem);
+                    });
+                }
+            });
+        }
+        document.getElementById('video-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const videoId = document.getElementById('video-id').value;
+            const name = document.getElementById('video-name').value;
+            const url = document.getElementById('video-url').value;
+            if (!name || !url) {
+                showModal('Please fill in both name and URL.');
+                return;
+            }
+            try {
+                if (videoId) {
+                    await videoLinksRef.child(videoId).update({ name, url });
+                    showModal('Video link updated successfully!');
+                } else {
+                    await videoLinksRef.push({ name, url });
+                    showModal('Video link added successfully!');
+                }
+                document.getElementById('video-form').reset();
+                document.getElementById('video-id').value = '';
+                loadVideoLinksAdmin();
+                loadVideoLinks();
+            } catch (error) {
+                showModal('Failed to manage video link: ' + error.message);
+            }
+        });
+        async function editVideoLink(videoId) {
+            const videoSnapshot = await videoLinksRef.child(videoId).once('value');
+            const video = videoSnapshot.val();
+            if (video) {
+                document.getElementById('video-id').value = videoId;
+                document.getElementById('video-name').value = video.name;
+                document.getElementById('video-url').value = video.url;
+            }
+        }
+        function deleteVideoLink(videoId) {
+            showConfirmModal('Delete this video link?', async () => {
+                try {
+                    await videoLinksRef.child(videoId).remove();
+                    showModal('Video link deleted!');
+                    loadVideoLinksAdmin();
+                    loadVideoLinks();
+                } catch (error) {
+                    showModal('Failed to delete video link: ' + error.message);
+                }
+            });
+        }
+        function loadAdminChatList() {
+            const adminChatList = document.getElementById('admin-chat-list');
+            adminChatList.innerHTML = '';
+            messagesRef.on('value', (snapshot) => {
+                adminChatList.innerHTML = '';
+                const usersWithMessages = {};
+                snapshot.forEach((childSnapshot) => {
+                    const message = childSnapshot.val();
+                    if (message.receiverId === 'admin_uid' && !usersWithMessages[message.senderId]) {
+                        usersWithMessages[message.senderId] = message.senderName;
+                    }
+                });
+                for (const userId in usersWithMessages) {
+                    const userName = usersWithMessages[userId];
+                    const chatItem = document.createElement('div');
+                    chatItem.className = 'p-4 rounded-xl mb-3 bg-gradient-to-r from-gray-50 to-white shadow-sm flex justify-between items-center card-3d';
+                    chatItem.innerHTML = `
+                        <span class="font-medium"><strong>${userName}</strong></span>
+                        <div class="flex space-x-2">
+                            <button onclick="startAdminChat('${userId}', '${userName}')" class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Open Chat</button>
+                            <button onclick="deleteChat('${userId}')" class="px-3 py-1.5 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm rounded-lg font-medium hover:from-red-600 hover:to-orange-600 transition duration-300 shadow transform transition duration-300 hover:scale-105 btn-3d">Delete Chat</button>
+                        </div>
+                    `;
+                    adminChatList.appendChild(chatItem);
+                }
+            });
+        }
+        function deleteChat(userId) {
+            showConfirmModal('Are you sure you want to delete this chat history?', async () => {
+                try {
+                    const messagesToDelete = await messagesRef.orderByChild('senderId').equalTo(userId).once('value');
+                    messagesToDelete.forEach(messageSnapshot => {
+                        messageSnapshot.ref.remove();
+                    });
+                    const messagesToDelete2 = await messagesRef.orderByChild('receiverId').equalTo(userId).once('value');
+                    messagesToDelete2.forEach(messageSnapshot => {
+                        messageSnapshot.ref.remove();
+                    });
+                    showModal('Chat history deleted successfully!');
+                } catch (error) {
+                    showModal('Failed to delete chat: ' + error.message);
+                }
+            });
+        }
+        function startAdminChat(userId, userName) {
+            activeAdminChatUserId = userId;
+            showAdminChatModal(userName);
+            loadAdminChatMessages(userId);
+        }
+        function loadAdminChatMessages(userId) {
+            adminChatMessages.innerHTML = '';
+            messagesRef.orderByChild('timestamp').on('value', (snapshot) => {
+                adminChatMessages.innerHTML = '';
+                snapshot.forEach((childSnapshot) => {
+                    const message = childSnapshot.val();
+                    if ((message.senderId === userId && message.receiverId === 'admin_uid') || (message.senderId === 'admin_uid' && message.receiverId === userId)) {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = `p-4 rounded-2xl max-w-xs md:max-w-md ${message.isUserMessage ? 'bg-gradient-to-r from-blue-100 to-indigo-100 self-start mr-auto' : 'bg-gradient-to-r from-green-100 to-emerald-100 self-end ml-auto'}`;
+                        messageDiv.innerText = message.message;
+                        adminChatMessages.appendChild(messageDiv);
+                    }
+                });
+                adminChatMessages.scrollTop = adminChatMessages.scrollHeight;
+            });
+        }
+        function sendAdminReply() {
+            const message = adminChatInput.value.trim();
+            if (message === '' || !activeAdminChatUserId) return;
+            const messageData = {
+                senderId: 'admin_uid',
+                senderName: 'Admin',
+                receiverId: activeAdminChatUserId,
+                message: message,
+                timestamp: new Date().toISOString(),
+                isUserMessage: false
+            };
+            messagesRef.push(messageData);
+            adminChatInput.value = '';
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            showLoginForm();
+            updateTotalMembersCount();
+        });
+    </script>
+</body>
+</html>
